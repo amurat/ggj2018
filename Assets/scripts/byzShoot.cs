@@ -18,7 +18,7 @@ public class byzShoot : MonoBehaviour
 	    if (Input.GetKeyDown(shootKey))
 	    {
 	        GameObject shot = GameObject.Instantiate(projectile, transform.position, transform.rotation);
-            //shot.GetComponent<Rigidbody>().AddForce(transform.up * shootForce);
+			Physics.IgnoreCollision(shot.GetComponent<Collider>(), GetComponent<Collider>());
 	    }
 	}
 }
