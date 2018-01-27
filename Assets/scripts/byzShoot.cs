@@ -6,7 +6,8 @@ public class byzShoot : MonoBehaviour
 {
     public KeyCode shootKey = KeyCode.UpArrow;
     public GameObject projectile;
-    public float shootForce = 100;
+
+	public AudioClip fireProjectileAudioClip;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,7 @@ public class byzShoot : MonoBehaviour
 	    {
 	        GameObject shot = GameObject.Instantiate(projectile, transform.position, transform.rotation);
 			Physics.IgnoreCollision(shot.GetComponent<Collider>(), GetComponent<Collider>());
+			GetComponent<AudioSource>().PlayOneShot(fireProjectileAudioClip);
 	    }
 	}
 }
