@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 57629eb8cc68ebd4db84ae564949a814
+timeCreated: 1460596223
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - pauseWall: {fileID: 190324, guid: 8ac9e6e24de614443bebca20da46e2a4, type: 2}
+  - wealthTrack: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
