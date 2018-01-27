@@ -16,7 +16,7 @@ public class byzantineBirdGen : MonoBehaviour {
     int scoreKeeper;
 	public int curLivingBirds = 0;
 
-	public int maxBirdsSpawnedAtOnce = 10; 
+	public int maxBirdsSpawnedAtOnce; 
 
     // Use this for initialization
     void Start()
