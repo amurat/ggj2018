@@ -6,10 +6,15 @@ public class byzArrowProjectile : MonoBehaviour {
 
     public float velocity = 10;
     
+    public AudioClip projectileHitAudioClip;
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "bird")
         {
+            if (projectileHitAudioClip) {
+                AudioSource.PlayClipAtPoint(projectileHitAudioClip, transform.position);
+            }
             GameObject.Destroy(collision.gameObject);
             GameObject.Destroy(gameObject);
         }

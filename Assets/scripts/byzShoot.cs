@@ -20,7 +20,9 @@ public class byzShoot : MonoBehaviour
 	    {
 	        GameObject shot = GameObject.Instantiate(projectile, transform.position, transform.rotation);
 			Physics.IgnoreCollision(shot.GetComponent<Collider>(), GetComponent<Collider>());
-			GetComponent<AudioSource>().PlayOneShot(fireProjectileAudioClip);
-	    }
+			if (fireProjectileAudioClip) {
+                AudioSource.PlayClipAtPoint(fireProjectileAudioClip, transform.position);
+            }
+ 	    }
 	}
 }
