@@ -20,23 +20,28 @@ public class byzShoot : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
+		bool hit = false;
 	    if (Input.GetKeyDown(shootKeyA))
 	    {
 	        GameObject shot = GameObject.Instantiate(projectileA, transform.position, transform.rotation);
 			Physics.IgnoreCollision(shot.GetComponent<Collider>(), GetComponent<Collider>());
-			GetComponent<AudioSource>().PlayOneShot(fireProjectileAudioClip);
+			hit = true;
 	    }
 		else if (Input.GetKeyDown(shootKeyB))
 		{
 			GameObject shot = GameObject.Instantiate(projectileB, transform.position, transform.rotation);
 			Physics.IgnoreCollision(shot.GetComponent<Collider>(), GetComponent<Collider>());
-			GetComponent<AudioSource>().PlayOneShot(fireProjectileAudioClip);
+			hit = true;
 		} 
 		else if (Input.GetKeyDown(shootKeyC))
 		{
 			GameObject shot = GameObject.Instantiate(projectileC, transform.position, transform.rotation);
 			Physics.IgnoreCollision(shot.GetComponent<Collider>(), GetComponent<Collider>());
-			GetComponent<AudioSource>().PlayOneShot(fireProjectileAudioClip);
+			hit = true;
 		}
+		if (hit && fireProjectileAudioClip) {
+                AudioSource.PlayClipAtPoint(fireProjectileAudioClip, transform.position);
+        }
+
 	}
 }
