@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class byzArrowProjectile : MonoBehaviour {
 
-    float velocity = 10;
+    public float velocity = 10;
     
     void OnCollisionEnter(Collision collision)
     {

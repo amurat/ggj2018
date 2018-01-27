@@ -5,10 +5,12 @@ using UnityEngine;
 public class byzBirdMoveDestroy : MonoBehaviour {
 
 	//rules for when the Byzantine Birds move or are destroyed
-	public float minSpeed = 1;
+	public float minSpeed = 3;
 	public float maxSpeed = 5;
+
 	float startPosition;
 	float randomizeBirdSpeed; 
+
 
 	// Use this for initialization
 	void Start () {
@@ -22,12 +24,14 @@ public class byzBirdMoveDestroy : MonoBehaviour {
 			transform.Translate(Vector2.right*randomizeBirdSpeed*Time.deltaTime);
 			if (transform.position.x > 20){
 				Destroy(this.gameObject);
+				FindObjectOfType<byzantineBirdGen> ().DestroyBird(false);//tell the generator that you killed a bird
 			}
 		}
 		else if (startPosition > 10) {
 			transform.Translate(Vector2.left*randomizeBirdSpeed*Time.deltaTime);
 			if (transform.position.x < -20){
 				Destroy (this.gameObject);
+				FindObjectOfType<byzantineBirdGen> ().DestroyBird(false);//tell the generator that you killed a bird
 			}
 		}
 	}
