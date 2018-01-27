@@ -18,4 +18,8 @@ public class byzArrowProjectile : MonoBehaviour {
     void Update () {
 		transform.position += transform.up * velocity * Time.deltaTime;
     }
+
+    void OnBecameInvisible () {
+        Destroy(gameObject);
+    }
 }
