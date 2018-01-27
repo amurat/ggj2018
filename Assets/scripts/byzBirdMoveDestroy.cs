@@ -1,0 +1,34 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class byzBirdMoveDestroy : MonoBehaviour {
+
+	//rules for when the Byzantine Birds move or are destroyed
+	public float minSpeed = 1;
+	public float maxSpeed = 5;
+	float startPosition;
+
+	// Use this for initialization
+	void Start () {
+		startPosition = transform.position.x;		//discern whether birds started on left or right
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		float randomizeBirdSpeed = Random.Range(minSpeed,maxSpeed);	//each instance of a bird should move at it's own speed
+
+		if (startPosition < -10) {
+			transform.Translate(Vector2.right*randomizeBirdSpeed*Time.deltaTime);
+			if (transform.position.x > 20){
+				Destroy(this.gameObject);
+			}
+		}
+		else if (startPosition > 10) {
+			transform.Translate(Vector2.left*randomizeBirdSpeed*Time.deltaTime);
+			if (transform.position.x < -20){
+				Destroy (this.gameObject);
+			}
+		}
+	}
+}
