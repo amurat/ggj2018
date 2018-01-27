@@ -5,8 +5,8 @@ using UnityEngine;
 public class byzBirdMoveDestroy : MonoBehaviour {
 
 	//rules for when the Byzantine Birds move or are destroyed
-	public float minSpeed = 3;
-	public float maxSpeed = 5;
+	public float minSpeed = 5;
+	public float maxSpeed = 9;
 
 	float startPosition;
 	float randomizeBirdSpeed; 
