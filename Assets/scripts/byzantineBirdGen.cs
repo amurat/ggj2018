@@ -14,6 +14,9 @@ public class byzantineBirdGen : MonoBehaviour {
 	
     int counter;
     int scoreKeeper;
+	public int curLivingBirds = 0;
+
+	public int maxBirdsSpawnedAtOnce = 10; 
 
     // Use this for initialization
     void Start()
@@ -24,37 +27,47 @@ public class byzantineBirdGen : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        
+		//if there aren't enough birds, spawn a new one each frame until there are
+		if (curLivingBirds < maxBirdsSpawnedAtOnce) {
+			spawnBird ();
+		}
     }
 	
 	IEnumerator genBirds()
     {
-        int objSoFar = 0;
-        int randomLimit = Random.Range(10, 20); // make parameter of class tunable
-
-
-        Debug.Log(randomLimit);
-        while (objSoFar < randomLimit)
+		while (curLivingBirds < maxBirdsSpawnedAtOnce)
         {
-            int randomizeBird = Random.Range(1, 10); //randomize coin flip whether a bird is generated on left or right
-            
-			if (randomizeBird < 6) { //half the time, generate a bird from the left
-				Vector3 leftGenPoint = new Vector3(Random.Range(leftSide-5, leftSide), Random.Range (bottomSide, topSide), 0f);
-				Instantiate(birdFromLeft, leftGenPoint, Quaternion.identity);
-				objSoFar++;
-			}
-			else if (randomizeBird >= 5){ //half the time, generate a bird from the right
-				Vector3 rightGenPoint = new Vector3(Random.Range(rightSide, rightSide+5), Random.Range (bottomSide, topSide), 0f);
-				Instantiate(birdFromRight, rightGenPoint, Quaternion.identity);
-				objSoFar++;				
-			}
-			else
-			{
-				Debug.Log ("randomizeBird value out of bounds. Current value = "+randomizeBird);
-			}
-			
+			spawnBird ();
         }
        yield return new WaitForSeconds(0.9f);
-
     }
+
+	//spawn birds outside of generation method so we can spawn them from other thems
+	public void spawnBird()
+	{
+		int randomizeBird = Random.Range(1, 10); //randomize coin flip whether a bird is generated on left or right
+
+		if (randomizeBird < 6) { //half the time, generate a bird from the left
+			Vector3 leftGenPoint = new Vector3(Random.Range(leftSide-5, leftSide), Random.Range (bottomSide, topSide), 0f);
+			Instantiate(birdFromLeft, leftGenPoint, Quaternion.identity);
+			curLivingBirds++;
+		}
+		else if (randomizeBird >= 5){ //half the time, generate a bird from the right
+			Vector3 rightGenPoint = new Vector3(Random.Range(rightSide, rightSide+5), Random.Range (bottomSide, topSide), 0f);
+			Instantiate(birdFromRight, rightGenPoint, Quaternion.identity);
+			curLivingBirds++;				
+		}
+		else
+		{
+			Debug.Log ("randomizeBird value out of bounds. Current value = "+randomizeBird);
+		}
+	}
+
+	//kills a bird off. if it was destroyed by an arrow, handle some scoring
+	public void DestroyBird(bool wasDestroyedByArrow){
+		curLivingBirds--;
+		if (wasDestroyedByArrow) {
+			//scoring logic 
+		}
+	}
 }
