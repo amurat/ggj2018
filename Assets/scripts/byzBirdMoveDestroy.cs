@@ -24,14 +24,14 @@ public class byzBirdMoveDestroy : MonoBehaviour {
 			transform.Translate(Vector2.right*randomizeBirdSpeed*Time.deltaTime);
 			if (transform.position.x > 20){
 				Destroy(this.gameObject);
-				FindObjectOfType<byzantineBirdGen> ().DestroyBird(false);//tell the generator that you killed a bird
+				FindObjectOfType<byzantineBirdGen> ().DestroyBird(birdDestroyMethod.REACHED_RIGHT);//tell the generator that you killed a bird
 			}
 		}
 		else if (startPosition > 10) {
 			transform.Translate(Vector2.left*randomizeBirdSpeed*Time.deltaTime);
 			if (transform.position.x < -20){
 				Destroy (this.gameObject);
-				FindObjectOfType<byzantineBirdGen> ().DestroyBird(false);//tell the generator that you killed a bird
+				FindObjectOfType<byzantineBirdGen> ().DestroyBird(birdDestroyMethod.REACHED_LEFT);//tell the generator that you killed a bird
 			}
 		}
 	}

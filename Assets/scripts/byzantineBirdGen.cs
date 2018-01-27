@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class byzantineBirdGen : MonoBehaviour {
 //in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
     public GameObject birdFromLeft;
@@ -17,6 +18,13 @@ public class byzantineBirdGen : MonoBehaviour {
 	public int curLivingBirds = 0;
 
 	public int maxBirdsSpawnedAtOnce; 
+
+	//score stuff
+	int leftConfidenceMeterValue;
+	int rightConfidenceMeterValue;
+	int defaultConfidenceBoostAmount = 1;
+	int maxConfidenceMeterAmount = 20;
+	int totalBirdsDestroyed;
 
     // Use this for initialization
     void Start()
@@ -64,10 +72,25 @@ public class byzantineBirdGen : MonoBehaviour {
 	}
 
 	//kills a bird off. if it was destroyed by an arrow, handle some scoring
-	public void DestroyBird(bool wasDestroyedByArrow){
+	public void DestroyBird(birdDestroyMethod method){
 		curLivingBirds--;
-		if (wasDestroyedByArrow) {
-			//scoring logic 
+		if (method == birdDestroyMethod.DESTROYED_BY_ARROW) {
+			//scoring logic for destroyed by arrow
+			totalBirdsDestroyed++;
+		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
+			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
+		} else if (method == birdDestroyMethod.REACHED_LEFT) {
+			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
+		} else {
+			Debug.Log ("WHAT KILLED THE BIRD!?");
 		}
+		Debug.Log ("Total birds destroyed: " + totalBirdsDestroyed + ", right meter: " + rightConfidenceMeterValue + ", left meter: " + leftConfidenceMeterValue);
 	}
 }
+
+public enum birdDestroyMethod{
+	DESTROYED_BY_ARROW = 0,
+	REACHED_LEFT = 1,
+	REACHED_RIGHT = 2
+}
+
