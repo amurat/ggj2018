@@ -43,6 +43,12 @@ public class byzantineBirdGen : MonoBehaviour {
 		}
     }
 	
+	public void checkLoseCondition()
+	{
+		if ((leftConfidenceMeterValue >= maxConfidenceMeterAmount) && (rightConfidenceMeterValue >= maxConfidenceMeterAmount)) {
+			
+		}
+	}
 	IEnumerator genBirds()
     {
 		while (curLivingBirds < maxBirdsSpawnedAtOnce)
