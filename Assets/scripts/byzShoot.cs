@@ -18,9 +18,12 @@ public class byzShoot : MonoBehaviour
 
 	public float currentCapacity;
 	
+	public float chargeBarPositionOffset = 0;
+
 	// Use this for initialization
 	void Start () {
 		currentCapacity = projectileCapacity;
+		gameObject.AddComponent<byzArrowMeter>();
 	}
 	
 	// Update is called once per frame
@@ -62,4 +65,14 @@ public class byzShoot : MonoBehaviour
 		}
 
 	}
+
+	 
+    void OnGUI()
+    {
+   
+        Vector2 targetPos;
+		targetPos = Camera.main.WorldToScreenPoint (transform.position);
+    	GUI.Box(new Rect(targetPos.x, Screen.height- chargeBarPositionOffset, 800, 30), currentCapacity + "/" + projectileCapacity);
+    }
+ 
 }
