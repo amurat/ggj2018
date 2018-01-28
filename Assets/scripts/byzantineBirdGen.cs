@@ -4,32 +4,34 @@ using UnityEngine;
 
 
 public class byzantineBirdGen : MonoBehaviour {
-//in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
     public GameObject birdA;
 	public GameObject birdB;
 	public GameObject birdC;
 	GameObject birdOfChoice;
 
-	public GameObject conMeterLeft;			//left confidence meter starts at posX = -22, needs to stop at posX = -13
-	public GameObject conMeterRight;		//right confidence meter starts at posX = 22, needs to stop at posX = 13
+	public GameObject conMeterLeft;			
+	public GameObject conMeterRight;	
+	public GameObject scoreTracker;
 
+	//in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
 	public float topSide = 2.5f;		//upper Y limit = 2.5
     public float bottomSide = 0;	//lower Y limit = 0
     public float leftSide = -12;		//left tower X = -11.4
     public float rightSide = 12;	//right tower X = 11.4
 	
     int counter;
-    int scoreKeeper;
 	public int curLivingBirds = 0;
-
 	public int maxBirdsSpawnedAtOnce; 
 
 	//score stuff
-	int leftConfidenceMeterValue;
-	int rightConfidenceMeterValue;
-	int defaultConfidenceBoostAmount = 1;
-	public int maxConfidenceMeterAmount = 20;
+	float leftConfidenceMeterValue;
+	float rightConfidenceMeterValue;
+	const float STARTING_CONFIDENCE = 20f;
+	float defaultConfidenceBoostAmount = 1f;
+	const float MAX_CONFIDENCE_METER_AMOUNT = 400f;
 	int totalBirdsDestroyed;
+	public int score;
+	const int SCORE_FOR_DESTROYING_BIRD_NORMAL = 20;
 
 	// lose condition countdown
 	public float defeatCountdownDuration = 10;
@@ -37,11 +39,17 @@ public class byzantineBirdGen : MonoBehaviour {
 	private float defeatCountdownDeadline;
 
 	private bool gameOver = false;
+
+	private string endGameMessage;
+	private int endGameBonusScore;
+	private string winLoseMessage;
 	
     // Use this for initialization
     void Start()
     {
 		StartCoroutine(genBirds());
+		leftConfidenceMeterValue = STARTING_CONFIDENCE;
+		rightConfidenceMeterValue = STARTING_CONFIDENCE;
 	}
 
     // Update is called once per frame
@@ -59,8 +67,8 @@ public class byzantineBirdGen : MonoBehaviour {
 	
 	private void handleVictoryDefeatCountdown()
 	{
-		bool leftMeterMaxed = (leftConfidenceMeterValue >= maxConfidenceMeterAmount);
-		bool rightMeterMaxed = 	(rightConfidenceMeterValue >= maxConfidenceMeterAmount);
+		bool leftMeterMaxed = (leftConfidenceMeterValue >= MAX_CONFIDENCE_METER_AMOUNT);
+		bool rightMeterMaxed = 	(rightConfidenceMeterValue >= MAX_CONFIDENCE_METER_AMOUNT);
 		bool bothMeteresMaxed = leftMeterMaxed && rightMeterMaxed;
 
 		if (!defeatCountdownMode) {
@@ -86,7 +94,7 @@ public class byzantineBirdGen : MonoBehaviour {
 					OnCountdownMeterExpiring(remaining);					
 				}
 			} else {
-				OnPlayerVictory();
+				OnPlayerVictory(false);
 				gameOver = true;
 			}
 		}
@@ -97,15 +105,26 @@ public class byzantineBirdGen : MonoBehaviour {
 		// handle meter flashing updates here
 	}
 
-	private void OnPlayerVictory() 
+	private void OnPlayerVictory(bool didArmiesRetreat) //determines what trigged this win condition 
 	{
 		// handle victory condition
+		winLoseMessage = "Player Victorious!";
+		if (didArmiesRetreat) {
+			endGameBonusScore = 1000;
+			endGameMessage = "The battalions failed to coordinate their attack. One attacked and was easily defeated. The other retreated.";
+		} else {
+			endGameBonusScore = 500;
+			endGameMessage = "The battalions both lost confidence and retreated. The town is safe!";
+		}
 		Debug.Log ("OnPlayerVictory");
 	}
 
 	private void OnPlayerDefeat()
 	{
 		// handle defeat condition
+		endGameBonusScore = 0;
+		endGameMessage = "The armies successfully coordinated their attack. The town was destroyed.";
+		winLoseMessage = "Player Defeated!";
 		Debug.Log ("OnPlayerDefeat");
 	}
 
@@ -159,20 +178,26 @@ public class byzantineBirdGen : MonoBehaviour {
 	//kills a bird off. if it was destroyed by an arrow, handle some scoring
 	public void DestroyBird(birdDestroyMethod method){
 		curLivingBirds--;
+
+			
 		if (method == birdDestroyMethod.DESTROYED_BY_ARROW) {
 			//scoring logic for destroyed by arrow
 			totalBirdsDestroyed++;
+			score += SCORE_FOR_DESTROYING_BIRD_NORMAL;
+			scoreTracker.GetComponent<TextMesh>().text = "Score @ "+score; //update the score GUI
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
-			if (rightConfidenceMeterValue <= maxConfidenceMeterAmount){
+			if (rightConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
+				float confidenceMeterModifier = ( rightConfidenceMeterValue /  MAX_CONFIDENCE_METER_AMOUNT);
 				//conMeterRight.transform.Translate(Vector2.left*1);
+				//conMeterRight.transform.localScale = new Vector3(0.6f + (0.035f * confidenceMeterModifier), 0, 0);
 				conMeterRight.transform.localScale += new Vector3(0.035f,0,0);
 			}
 
 			Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
 		} else if (method == birdDestroyMethod.REACHED_LEFT) {
 			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
-			if (leftConfidenceMeterValue <= maxConfidenceMeterAmount){
+			if (leftConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
 				//conMeterLeft.transform.Translate(Vector2.right*1);
 				conMeterLeft.transform.localScale += new Vector3(0.035f,0,0);
 			}
@@ -183,6 +208,9 @@ public class byzantineBirdGen : MonoBehaviour {
 		}
 		Debug.Log ("Total birds destroyed: " + totalBirdsDestroyed + ", right meter: " + rightConfidenceMeterValue + ", left meter: " + leftConfidenceMeterValue);
 	}
+
+
+
 }
 
 public enum birdDestroyMethod{
