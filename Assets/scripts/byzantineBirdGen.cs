@@ -57,6 +57,11 @@ public class byzantineBirdGen : MonoBehaviour {
     void Start()
     {
 		StartCoroutine(genBirds());
+
+		for (int i = 0; i <= maxBirdsSpawnedAtOnce; i++) {			
+			spawnBird ();
+		}
+
 		leftConfidenceMeterValue = STARTING_CONFIDENCE;
 		rightConfidenceMeterValue = STARTING_CONFIDENCE;
 		//set starting for conmeters
