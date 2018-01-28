@@ -4,15 +4,15 @@ using UnityEngine;
 
 
 public class byzantineBirdGen : MonoBehaviour {
-//in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
     public GameObject birdA;
 	public GameObject birdB;
 	public GameObject birdC;
 	GameObject birdOfChoice;
 
-	public GameObject conMeterLeft;			//left confidence meter starts at posX = -22, needs to stop at posX = -13
-	public GameObject conMeterRight;		//right confidence meter starts at posX = 22, needs to stop at posX = 13
+	public GameObject conMeterLeft;			
+	public GameObject conMeterRight;	
 
+	//in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
 	public float topSide = 2.5f;		//upper Y limit = 2.5
     public float bottomSide = 0;	//lower Y limit = 0
     public float leftSide = -12;		//left tower X = -11.4
