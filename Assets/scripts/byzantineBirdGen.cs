@@ -12,6 +12,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	public GameObject conMeterLeft;			
 	public GameObject conMeterRight;	
 	public GameObject scoreTracker;
+	public GameObject messageTracker;
 
 	//in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
 	public float topSide = 2.5f;		//upper Y limit = 2.5
@@ -58,6 +59,11 @@ public class byzantineBirdGen : MonoBehaviour {
     void Start()
     {
 		StartCoroutine(genBirds());
+
+		for (int i = 0; i <= maxBirdsSpawnedAtOnce; i++) {			
+			spawnBird ();
+		}
+
 		leftConfidenceMeterValue = STARTING_CONFIDENCE;
 		rightConfidenceMeterValue = STARTING_CONFIDENCE;
 		//set starting for conmeters
@@ -118,7 +124,11 @@ public class byzantineBirdGen : MonoBehaviour {
 	void OnGUI()
 	{
 		if (endGameMessage != null &&endGameMessage.Length > 0) {
-			GUI.Box(new Rect(Screen.width/4, Screen.height/4, Screen.width/2, Screen.height/2), endGameMessage);
+			string message = winLoseMessage + "\n";
+			message += endGameMessage + "\n";
+			if (messageTracker != null) {
+				messageTracker.GetComponent<TextMesh>().text = endGameMessage; 
+			}
 		}
 	}
 
@@ -168,10 +178,10 @@ public class byzantineBirdGen : MonoBehaviour {
 		winLoseMessage = "Player Victorious!";
 		if (didArmiesRetreat) {
 			endGameBonusScore = 1000;
-			endGameMessage = "The battalions failed to coordinate their attack. One attacked and was easily defeated. The other retreated.";
+			endGameMessage = "The battalions failed to\ncoordinate their attack.\nOne attacked and was easily\ndefeated. The other retreated.";
 		} else {
 			endGameBonusScore = 500;
-			endGameMessage = "The battalions both lost confidence and retreated. The town is safe!";
+			endGameMessage = "The battalions both lost\nconfidence and retreated.\nThe town is safe!";
 		}
 		Debug.Log ("OnPlayerVictory");
 	}
@@ -180,7 +190,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	{
 		// handle defeat condition
 		endGameBonusScore = 0;
-		endGameMessage = "The armies successfully coordinated their attack. The town was destroyed.";
+		endGameMessage = "The armies successfully\ncoordinated their attack.\nThe town was destroyed.";
 		winLoseMessage = "Player Defeated!";
 		Debug.Log ("OnPlayerDefeat");
 	}
