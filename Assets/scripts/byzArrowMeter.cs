@@ -7,13 +7,15 @@ public class byzArrowMeter : MonoBehaviour {
 
     private Vector2 size;
 
-    private Texture2D backgroundTexture;
+    public Texture2D backgroundTexture;
     private GUIStyle textureStyle;
 
     public float percent = 100.0f;
 
     void Start () {
-        backgroundTexture = Texture2D.whiteTexture;
+        if (!backgroundTexture) {
+            backgroundTexture = Texture2D.whiteTexture;
+        }
         textureStyle = new GUIStyle {normal = new GUIStyleState { background = backgroundTexture } };
         offset.x = 350;
         offset.y = 270;
@@ -31,7 +33,7 @@ public class byzArrowMeter : MonoBehaviour {
          if (redZone) {
              meterColor = Color.red;
          } else {
-             meterColor = Color.green;
+             meterColor = Color.white;
          }
          var backgroundColor = GUI.backgroundColor;
          GUI.backgroundColor = meterColor;
