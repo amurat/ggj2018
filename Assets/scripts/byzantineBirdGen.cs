@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class byzantineBirdGen : MonoBehaviour {
 //in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
-    public GameObject birdFromLeft;
-	public GameObject birdFromRight;
-	
+    public GameObject birdA;
+	public GameObject birdB;
+	public GameObject birdC;
+	GameObject birdOfChoice;
+
 	public float topSide = 2.5f;		//upper Y limit = 2.5
     public float bottomSide = 0;	//lower Y limit = 0
     public float leftSide = -12;		//left tower X = -11.4
@@ -53,21 +55,37 @@ public class byzantineBirdGen : MonoBehaviour {
 	//spawn birds outside of generation method so we can spawn them from other thems
 	public void spawnBird()
 	{
-		int randomizeBird = Random.Range(1, 10); //randomize coin flip whether a bird is generated on left or right
+		int randomizeBirdSpot = Random.Range(1, 10); //randomize coin flip whether a bird is generated on left or right
 
-		if (randomizeBird < 6) { //half the time, generate a bird from the left
+		int randomBirdChoice = Random.Range(0,4); //randomly generate 1 of the 3 possible birds each time
+
+		if (randomBirdChoice == 1){
+			birdOfChoice = birdA;
+		}
+		else if (randomBirdChoice == 2){
+			birdOfChoice = birdB;
+		}
+		else if (randomBirdChoice == 3){
+			birdOfChoice = birdC;
+		}
+
+
+		if (randomizeBirdSpot < 6) { //half the time, generate a bird from the left
+
 			Vector3 leftGenPoint = new Vector3(Random.Range(leftSide-5, leftSide), Random.Range (bottomSide, topSide), 0f);
-			Instantiate(birdFromLeft, leftGenPoint, Quaternion.identity);
+			Instantiate(birdOfChoice, leftGenPoint, Quaternion.identity);
 			curLivingBirds++;
 		}
-		else if (randomizeBird >= 5){ //half the time, generate a bird from the right
+		else if (randomizeBirdSpot >= 5){ //half the time, generate a bird from the right
+
 			Vector3 rightGenPoint = new Vector3(Random.Range(rightSide, rightSide+5), Random.Range (bottomSide, topSide), 0f);
-			Instantiate(birdFromRight, rightGenPoint, Quaternion.identity);
+			birdOfChoice.GetComponent<SpriteRenderer>().flipX = true;
+			Instantiate(birdOfChoice, rightGenPoint, Quaternion.identity);
 			curLivingBirds++;				
 		}
 		else
 		{
-			Debug.Log ("randomizeBird value out of bounds. Current value = "+randomizeBird);
+			Debug.Log ("randomizeBirdSpot out of bounds, showing X value of "+randomizeBirdSpot);
 		}
 	}
 
