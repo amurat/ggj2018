@@ -164,10 +164,13 @@ public class byzantineBirdGen : MonoBehaviour {
 			totalBirdsDestroyed++;
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
-			conMeterRight.transform.position.x--;
+			conMeterRight.transform.Translate(Vector2.left*2);
+			Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
 		} else if (method == birdDestroyMethod.REACHED_LEFT) {
 			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
-			conMeterLeft.transform.position.x++;
+			conMeterLeft.transform.Translate(Vector2.right*2);
+
+			Debug.Log ("Left Confidence @ "+leftConfidenceMeterValue);
 		} else {
 			Debug.Log ("WHAT KILLED THE BIRD!?");
 		}
