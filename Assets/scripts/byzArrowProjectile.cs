@@ -8,7 +8,8 @@ public class byzArrowProjectile : MonoBehaviour {
     
     public AudioClip projectileHitAudioClip;
 
-    void OnCollisionEnter(Collision collision)
+
+    void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "bird")
         {
