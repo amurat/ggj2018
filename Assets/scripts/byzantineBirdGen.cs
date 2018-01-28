@@ -10,8 +10,8 @@ public class byzantineBirdGen : MonoBehaviour {
 	public GameObject birdC;
 	GameObject birdOfChoice;
 
-	public GameObject conMeterLeft;
-	public GameObject conMeterRight;
+	public GameObject conMeterLeft;			//left confidence meter starts at posX = -22, needs to stop at posX = -13
+	public GameObject conMeterRight;		//right confidence meter starts at posX = 22, needs to stop at posX = 13
 
 	public float topSide = 2.5f;		//upper Y limit = 2.5
     public float bottomSide = 0;	//lower Y limit = 0
@@ -172,11 +172,18 @@ public class byzantineBirdGen : MonoBehaviour {
 			score += SCORE_FOR_DESTROYING_BIRD_NORMAL;
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
-			conMeterRight.transform.Translate(Vector2.left*2);
+			if (rightConfidenceMeterValue <= maxConfidenceMeterAmount){
+				//conMeterRight.transform.Translate(Vector2.left*1);
+				conMeterRight.transform.localScale += new Vector3(0.035f,0,0);
+			}
+
 			Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
 		} else if (method == birdDestroyMethod.REACHED_LEFT) {
 			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
-			conMeterLeft.transform.Translate(Vector2.right*2);
+			if (leftConfidenceMeterValue <= maxConfidenceMeterAmount){
+				//conMeterLeft.transform.Translate(Vector2.right*1);
+				conMeterLeft.transform.localScale += new Vector3(0.035f,0,0);
+			}
 
 			Debug.Log ("Left Confidence @ "+leftConfidenceMeterValue);
 		} else {
