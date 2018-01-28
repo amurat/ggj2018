@@ -21,8 +21,8 @@ public class byzantineBirdGen : MonoBehaviour {
     public float rightSide = 12;	//right tower X = 11.4
 	
     int counter;
-	public int curLivingBirds = 0;
-	public int maxBirdsSpawnedAtOnce; 
+	int curLivingBirds = 0;
+	const int MAX_BIRDS_SPAWNED_AT_ONCE = 8; 
 
 	//score stuff
 	float leftConfidenceMeterValue;
@@ -35,7 +35,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	float rightConfidenceMeterStartingXPosition = 22.21f;
 	float rightConfidenceMeterEndingXPosition = 13.2f;
 	float confidenceMeterLength = 9f;
-	float RETREAT_DELAY_AMOUNT = -15f;
+	float RETREAT_DELAY_AMOUNT = 15f;
 	float prevLeftMeterVal;
 	float prevRightMeterVal;
 	float confidenceDecrementVar = 1;
@@ -58,9 +58,9 @@ public class byzantineBirdGen : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-		StartCoroutine(genBirds());
+		//StartCoroutine(genBirds());
 
-		for (int i = 0; i <= maxBirdsSpawnedAtOnce; i++) {			
+		for (int i = 0; i <= MAX_BIRDS_SPAWNED_AT_ONCE; i++) {			
 			spawnBird ();
 		}
 
@@ -115,7 +115,7 @@ public class byzantineBirdGen : MonoBehaviour {
 			return;
 		}
 		//if there aren't enough birds, spawn a new one each frame until there are
-		if (curLivingBirds < maxBirdsSpawnedAtOnce) {
+		if (curLivingBirds < MAX_BIRDS_SPAWNED_AT_ONCE) {
 			spawnBird ();
 		}
 		handleVictoryDefeatCountdown();
@@ -176,7 +176,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	{
 		// handle victory condition
 		winLoseMessage = "Player Victorious!";
-		if (didArmiesRetreat) {
+		if (!didArmiesRetreat) {
 			endGameBonusScore = 1000;
 			endGameMessage = "The battalions failed to\ncoordinate their attack.\nOne attacked and was easily\ndefeated. The other retreated.";
 		} else {
@@ -197,7 +197,7 @@ public class byzantineBirdGen : MonoBehaviour {
 
 	IEnumerator genBirds()
     {
-		while (curLivingBirds < maxBirdsSpawnedAtOnce)
+		while (curLivingBirds < MAX_BIRDS_SPAWNED_AT_ONCE)
         {
 			spawnBird ();
         }
@@ -223,23 +223,20 @@ public class byzantineBirdGen : MonoBehaviour {
 
 
 		if (randomizeBirdSpot < 5) { //half the time, generate a bird from the left
-
 			Vector3 leftGenPoint = new Vector3(Random.Range(leftSide-5, leftSide), Random.Range (bottomSide, topSide), 0f);
 			birdOfChoice.GetComponent<SpriteRenderer>().flipX = false;
-			Instantiate(birdOfChoice, leftGenPoint, Quaternion.identity);
-			curLivingBirds++;
-		}
+			Instantiate(birdOfChoice, leftGenPoint, Quaternion.identity);		}
 		else if (randomizeBirdSpot >= 5){ //half the time, generate a bird from the right
-
 			Vector3 rightGenPoint = new Vector3(Random.Range(rightSide, rightSide+5), Random.Range (bottomSide, topSide), 0f);
 			birdOfChoice.GetComponent<SpriteRenderer>().flipX = true;
 			Instantiate(birdOfChoice, rightGenPoint, Quaternion.identity);
-			curLivingBirds++;				
 		}
 		else
 		{
 			Debug.Log ("randomizeBirdSpot out of bounds, showing X value of "+randomizeBirdSpot);
 		}
+
+		curLivingBirds++;
 	}
 
 	//kills a bird off. if it was destroyed by an arrow, handle some scoring
