@@ -34,6 +34,9 @@ public class byzantineBirdGen : MonoBehaviour {
 	float rightConfidenceMeterStartingXPosition = 22.21f;
 	float rightConfidenceMeterEndingXPosition = 13.2f;
 	float confidenceMeterLength = 9f;
+	float RETREAT_DELAY_AMOUNT = -15f;
+	float prevLeftMeterVal;
+	float prevRightMeterVal;
 
 	int totalBirdsDestroyed;
 	public int score;
@@ -56,10 +59,50 @@ public class byzantineBirdGen : MonoBehaviour {
 		StartCoroutine(genBirds());
 		leftConfidenceMeterValue = STARTING_CONFIDENCE;
 		rightConfidenceMeterValue = STARTING_CONFIDENCE;
+		//set starting for conmeters
+		updateConMeters();
+		prevLeftMeterVal = leftConfidenceMeterValue;
+		prevRightMeterVal = rightConfidenceMeterValue;
+
 	}
+
+	void updateConMeters(){
+		float confidenceMeterModifier;
+		confidenceMeterModifier = (leftConfidenceMeterValue * confidenceMeterLength) / MAX_CONFIDENCE_METER_AMOUNT;
+		conMeterLeft.transform.localPosition= new Vector3(leftConfidenceMeterStartingXPosition + confidenceMeterModifier,  conMeterLeft.transform.localPosition.y, 1f);
+		confidenceMeterModifier = (rightConfidenceMeterValue * confidenceMeterLength) / MAX_CONFIDENCE_METER_AMOUNT;
+		conMeterRight.transform.localPosition= new Vector3(rightConfidenceMeterStartingXPosition - confidenceMeterModifier,  conMeterRight.transform.localPosition.y, 1f);
+	}
+
 
     // Update is called once per frame
     void Update()    {
+
+		//
+		if (leftConfidenceMeterValue <= 0 && rightConfidenceMeterValue <= 0) {
+			OnPlayerVictory (true);
+		}
+
+		//decerement them over time
+		//BRIAN OR ALTAY DO THIS
+
+		//update visual
+		updateConMeters();
+
+		//check if it crossed the threshold so there is a delay
+		if (prevRightMeterVal >0 && rightConfidenceMeterValue <= 0) {
+			rightConfidenceMeterValue -= RETREAT_DELAY_AMOUNT;
+		}
+		if (prevLeftMeterVal >0 && leftConfidenceMeterValue <= 0) {
+			leftConfidenceMeterValue -= RETREAT_DELAY_AMOUNT;
+		}
+
+		//update prev values
+		prevLeftMeterVal = leftConfidenceMeterValue;
+		prevRightMeterVal = rightConfidenceMeterValue;
+
+
+
 		if (gameOver) {
 			return;
 		}
@@ -202,18 +245,16 @@ public class byzantineBirdGen : MonoBehaviour {
 			if (rightConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
 				float confidenceMeterModifier;
 				confidenceMeterModifier = (rightConfidenceMeterValue * confidenceMeterLength) / MAX_CONFIDENCE_METER_AMOUNT;
-			 	//conMeterRight.transform.Translate(Vector2.left*1);
-				conMeterRight.transform.localPosition= new Vector3(rightConfidenceMeterStartingXPosition - confidenceMeterModifier,  conMeterRight.transform.localPosition.y, 0f);
-				//conMeterRight.transform.localScale = new Vector3(0.6f + (0.035f * confidenceMeterModifier), 0, 0);
-				//conMeterRight.transform.localScale += new Vector3(0.035f,0,0);
+			 	conMeterRight.transform.localPosition= new Vector3(rightConfidenceMeterStartingXPosition - confidenceMeterModifier,  conMeterRight.transform.localPosition.y, 1f);
 			}
 
 			//Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
 		} else if (method == birdDestroyMethod.REACHED_LEFT) {
 			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
 			if (leftConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
-				//conMeterLeft.transform.Translate(Vector2.right*1);
-				conMeterLeft.transform.localScale += new Vector3(0.035f,0,0);
+				float confidenceMeterModifier;
+				confidenceMeterModifier = (leftConfidenceMeterValue * confidenceMeterLength) / MAX_CONFIDENCE_METER_AMOUNT;
+				conMeterLeft.transform.localPosition= new Vector3(leftConfidenceMeterStartingXPosition + confidenceMeterModifier,  conMeterLeft.transform.localPosition.y, 1f);
 			}
 
 			//Debug.Log ("Left Confidence @ "+leftConfidenceMeterValue); 
@@ -221,7 +262,7 @@ public class byzantineBirdGen : MonoBehaviour {
 			Debug.Log ("WHAT KILLED THE BIRD!?");
 		}
 		Debug.Log ("Total birds destroyed: " + totalBirdsDestroyed + ", right meter: " + rightConfidenceMeterValue + ", left meter: " + leftConfidenceMeterValue);
-	}
+	}		
 }
 
 public enum birdDestroyMethod{
