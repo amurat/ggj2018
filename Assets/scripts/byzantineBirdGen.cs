@@ -28,9 +28,16 @@ public class byzantineBirdGen : MonoBehaviour {
 	int leftConfidenceMeterValue;
 	int rightConfidenceMeterValue;
 	int defaultConfidenceBoostAmount = 1;
-	int maxConfidenceMeterAmount = 20;
+	public int maxConfidenceMeterAmount = 20;
 	int totalBirdsDestroyed;
 
+	// lose condition countdown
+	public float defeatCountdownDuration = 10;
+	private bool defeatCountdownMode = false;
+	private float defeatCountdownDeadline;
+
+	private bool gameOver = false;
+	
     // Use this for initialization
     void Start()
     {
@@ -40,18 +47,68 @@ public class byzantineBirdGen : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+		if (gameOver) {
+			return;
+		}
 		//if there aren't enough birds, spawn a new one each frame until there are
 		if (curLivingBirds < maxBirdsSpawnedAtOnce) {
 			spawnBird ();
 		}
+		handleVictoryDefeatCountdown();
     }
 	
-	public void checkLoseCondition()
+	private void handleVictoryDefeatCountdown()
 	{
-		if ((leftConfidenceMeterValue >= maxConfidenceMeterAmount) && (rightConfidenceMeterValue >= maxConfidenceMeterAmount)) {
-			
+		bool leftMeterMaxed = (leftConfidenceMeterValue >= maxConfidenceMeterAmount);
+		bool rightMeterMaxed = 	(rightConfidenceMeterValue >= maxConfidenceMeterAmount);
+		bool bothMeteresMaxed = leftMeterMaxed && rightMeterMaxed;
+
+		if (!defeatCountdownMode) {
+			if (leftMeterMaxed || rightMeterMaxed) 
+			{
+				Debug.Log ("entering defeat countdown");
+				defeatCountdownMode = true;
+				float currentTime = Time.time;
+				defeatCountdownDeadline = currentTime + defeatCountdownDuration;
+			}	
+		} 
+		
+		if (defeatCountdownMode) {
+			float currentTime = Time.time;
+			float remaining = Mathf.Max(defeatCountdownDeadline - currentTime, 0);
+			//Debug.Log ("defeat countdown : " + remaining);
+			if (remaining > 0) {
+				if (bothMeteresMaxed) 
+				{
+					OnPlayerDefeat();
+					gameOver = true;
+				} else {
+					OnCountdownMeterExpiring(remaining);					
+				}
+			} else {
+				OnPlayerVictory();
+				gameOver = true;
+			}
 		}
 	}
+
+	private void OnCountdownMeterExpiring(float remaining) 
+	{
+		// handle meter flashing updates here
+	}
+
+	private void OnPlayerVictory() 
+	{
+		// handle victory condition
+		Debug.Log ("OnPlayerVictory");
+	}
+
+	private void OnPlayerDefeat()
+	{
+		// handle defeat condition
+		Debug.Log ("OnPlayerDefeat");
+	}
+
 	IEnumerator genBirds()
     {
 		while (curLivingBirds < maxBirdsSpawnedAtOnce)
