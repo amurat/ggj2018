@@ -194,7 +194,7 @@ public class byzantineBirdGen : MonoBehaviour {
 				conMeterRight.transform.localScale += new Vector3(0.035f,0,0);
 			}
 
-			Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
+			//Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
 		} else if (method == birdDestroyMethod.REACHED_LEFT) {
 			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
 			if (leftConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
@@ -202,15 +202,12 @@ public class byzantineBirdGen : MonoBehaviour {
 				conMeterLeft.transform.localScale += new Vector3(0.035f,0,0);
 			}
 
-			Debug.Log ("Left Confidence @ "+leftConfidenceMeterValue);
+			//Debug.Log ("Left Confidence @ "+leftConfidenceMeterValue); 
 		} else {
 			Debug.Log ("WHAT KILLED THE BIRD!?");
 		}
 		Debug.Log ("Total birds destroyed: " + totalBirdsDestroyed + ", right meter: " + rightConfidenceMeterValue + ", left meter: " + leftConfidenceMeterValue);
 	}
-
-
-
 }
 
 public enum birdDestroyMethod{
