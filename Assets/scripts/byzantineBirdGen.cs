@@ -28,7 +28,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	float leftConfidenceMeterValue;
 	float rightConfidenceMeterValue;
 	const float STARTING_CONFIDENCE = 20f;
-	float defaultConfidenceBoostAmount = 1f;
+	float defaultConfidenceBoostAmount = 2f;
 	const float MAX_CONFIDENCE_METER_AMOUNT = 40f;
 	float leftConfidenceMeterStartingXPosition = -22.09f;
 	float leftConfidenceMeterEndingXPosition = -13.09f;
@@ -38,7 +38,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	float RETREAT_DELAY_AMOUNT = 15f;
 	float prevLeftMeterVal;
 	float prevRightMeterVal;
-	float confidenceDecrementVar = 1;
+	float confidenceDecrementVar = .8f;
 
 	int totalBirdsDestroyed;
 	public int score;
