@@ -65,6 +65,13 @@ public class byzantineBirdGen : MonoBehaviour {
 		handleVictoryDefeatCountdown();
     }
 	
+	void OnGUI()
+	{
+		if (endGameMessage.Length > 0) {
+			GUI.Box(new Rect(Screen.width/4, Screen.height/4, Screen.width/2, Screen.height/2), endGameMessage);
+		}
+	}
+
 	private void handleVictoryDefeatCountdown()
 	{
 		bool leftMeterMaxed = (leftConfidenceMeterValue >= MAX_CONFIDENCE_METER_AMOUNT);
