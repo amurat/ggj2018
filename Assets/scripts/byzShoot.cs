@@ -23,7 +23,9 @@ public class byzShoot : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 		currentCapacity = projectileCapacity;
-		gameObject.AddComponent<byzArrowMeter>();
+		if (!GetComponent<byzArrowMeter>()) {
+			gameObject.AddComponent<byzArrowMeter>();
+		}
 	}
 	
 	// Update is called once per frame
