@@ -23,10 +23,11 @@ public class byzantineBirdGen : MonoBehaviour {
 	public int maxBirdsSpawnedAtOnce; 
 
 	//score stuff
-	int leftConfidenceMeterValue;
-	int rightConfidenceMeterValue;
-	int defaultConfidenceBoostAmount = 1;
-	public int maxConfidenceMeterAmount = 20;
+	float leftConfidenceMeterValue;
+	float rightConfidenceMeterValue;
+	const float STARTING_CONFIDENCE = 20f;
+	float defaultConfidenceBoostAmount = 1f;
+	const float MAX_CONFIDENCE_METER_AMOUNT = 400f;
 	int totalBirdsDestroyed;
 	public int score;
 	const int SCORE_FOR_DESTROYING_BIRD_NORMAL = 20;
@@ -46,6 +47,8 @@ public class byzantineBirdGen : MonoBehaviour {
     void Start()
     {
 		StartCoroutine(genBirds());
+		leftConfidenceMeterValue = STARTING_CONFIDENCE;
+		rightConfidenceMeterValue = STARTING_CONFIDENCE;
 	}
 
     // Update is called once per frame
@@ -63,8 +66,8 @@ public class byzantineBirdGen : MonoBehaviour {
 	
 	private void handleVictoryDefeatCountdown()
 	{
-		bool leftMeterMaxed = (leftConfidenceMeterValue >= maxConfidenceMeterAmount);
-		bool rightMeterMaxed = 	(rightConfidenceMeterValue >= maxConfidenceMeterAmount);
+		bool leftMeterMaxed = (leftConfidenceMeterValue >= MAX_CONFIDENCE_METER_AMOUNT);
+		bool rightMeterMaxed = 	(rightConfidenceMeterValue >= MAX_CONFIDENCE_METER_AMOUNT);
 		bool bothMeteresMaxed = leftMeterMaxed && rightMeterMaxed;
 
 		if (!defeatCountdownMode) {
@@ -90,7 +93,7 @@ public class byzantineBirdGen : MonoBehaviour {
 					OnCountdownMeterExpiring(remaining);					
 				}
 			} else {
-				OnPlayerVictory();
+				OnPlayerVictory(false);
 				gameOver = true;
 			}
 		}
@@ -101,9 +104,17 @@ public class byzantineBirdGen : MonoBehaviour {
 		// handle meter flashing updates here
 	}
 
-	private void OnPlayerVictory() 
+	private void OnPlayerVictory(bool didArmiesRetreat) //determines what trigged this win condition 
 	{
 		// handle victory condition
+		winLoseMessage = "Player Victorious!";
+		if (didArmiesRetreat) {
+			endGameBonusScore = 1000;
+			endGameMessage = "The battalions failed to coordinate their attack. One attacked and was easily defeated. The other retreated.";
+		} else {
+			endGameBonusScore = 500;
+			endGameMessage = "The battalions both lost confidence and retreated. The town is safe!";
+		}
 		Debug.Log ("OnPlayerVictory");
 	}
 
@@ -166,21 +177,25 @@ public class byzantineBirdGen : MonoBehaviour {
 	//kills a bird off. if it was destroyed by an arrow, handle some scoring
 	public void DestroyBird(birdDestroyMethod method){
 		curLivingBirds--;
+
+			
 		if (method == birdDestroyMethod.DESTROYED_BY_ARROW) {
 			//scoring logic for destroyed by arrow
 			totalBirdsDestroyed++;
 			score += SCORE_FOR_DESTROYING_BIRD_NORMAL;
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
-			if (rightConfidenceMeterValue <= maxConfidenceMeterAmount){
+			if (rightConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
+				float confidenceMeterModifier = ( rightConfidenceMeterValue /  MAX_CONFIDENCE_METER_AMOUNT);
 				//conMeterRight.transform.Translate(Vector2.left*1);
+				//conMeterRight.transform.localScale = new Vector3(0.6f + (0.035f * confidenceMeterModifier), 0, 0);
 				conMeterRight.transform.localScale += new Vector3(0.035f,0,0);
 			}
 
 			Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
 		} else if (method == birdDestroyMethod.REACHED_LEFT) {
 			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
-			if (leftConfidenceMeterValue <= maxConfidenceMeterAmount){
+			if (leftConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
 				//conMeterLeft.transform.Translate(Vector2.right*1);
 				conMeterLeft.transform.localScale += new Vector3(0.035f,0,0);
 			}
