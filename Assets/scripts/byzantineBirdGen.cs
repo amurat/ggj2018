@@ -10,6 +10,9 @@ public class byzantineBirdGen : MonoBehaviour {
 	public GameObject birdC;
 	GameObject birdOfChoice;
 
+	public GameObject conMeterLeft;
+	public GameObject conMeterRight;
+
 	public float topSide = 2.5f;		//upper Y limit = 2.5
     public float bottomSide = 0;	//lower Y limit = 0
     public float leftSide = -12;		//left tower X = -11.4
@@ -76,9 +79,10 @@ public class byzantineBirdGen : MonoBehaviour {
 		}
 
 
-		if (randomizeBirdSpot < 6) { //half the time, generate a bird from the left
+		if (randomizeBirdSpot < 5) { //half the time, generate a bird from the left
 
 			Vector3 leftGenPoint = new Vector3(Random.Range(leftSide-5, leftSide), Random.Range (bottomSide, topSide), 0f);
+			birdOfChoice.GetComponent<SpriteRenderer>().flipX = false;
 			Instantiate(birdOfChoice, leftGenPoint, Quaternion.identity);
 			curLivingBirds++;
 		}
@@ -103,8 +107,10 @@ public class byzantineBirdGen : MonoBehaviour {
 			totalBirdsDestroyed++;
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
+			conMeterRight.transform.position.x--;
 		} else if (method == birdDestroyMethod.REACHED_LEFT) {
 			leftConfidenceMeterValue += defaultConfidenceBoostAmount;
+			conMeterLeft.transform.position.x++;
 		} else {
 			Debug.Log ("WHAT KILLED THE BIRD!?");
 		}
