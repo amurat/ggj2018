@@ -11,6 +11,7 @@ public class byzantineBirdGen : MonoBehaviour {
 
 	public GameObject conMeterLeft;			
 	public GameObject conMeterRight;	
+	public GameObject scoreTracker;
 
 	//in Byzantine General scene, limits are upper Y = 2.5, lower Y = 0, left tower X = -11.4, rightmost X = 11.4
 	public float topSide = 2.5f;		//upper Y limit = 2.5
@@ -170,6 +171,7 @@ public class byzantineBirdGen : MonoBehaviour {
 			//scoring logic for destroyed by arrow
 			totalBirdsDestroyed++;
 			score += SCORE_FOR_DESTROYING_BIRD_NORMAL;
+			scoreTracker.GetComponent<TextMesh>().text = "Score @ "+score; //update the score GUI
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
 			if (rightConfidenceMeterValue <= maxConfidenceMeterAmount){
