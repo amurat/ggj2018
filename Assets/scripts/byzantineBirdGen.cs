@@ -37,6 +37,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	float RETREAT_DELAY_AMOUNT = -15f;
 	float prevLeftMeterVal;
 	float prevRightMeterVal;
+	float confidenceDecrementVar = 1;
 
 	int totalBirdsDestroyed;
 	public int score;
@@ -84,7 +85,8 @@ public class byzantineBirdGen : MonoBehaviour {
 		}
 
 		//decerement them over time
-		//BRIAN OR ALTAY DO THIS
+		leftConfidenceMeterValue -= confidenceDecrementVar*Time.deltaTime;
+		rightConfidenceMeterValue -= confidenceDecrementVar*Time.deltaTime;
 
 		//update visual
 		updateConMeters();
