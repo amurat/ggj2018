@@ -70,6 +70,13 @@ public class byzantineBirdGen : MonoBehaviour {
 		handleVictoryDefeatCountdown();
     }
 	
+	void OnGUI()
+	{
+		if (endGameMessage != null &&endGameMessage.Length > 0) {
+			GUI.Box(new Rect(Screen.width/4, Screen.height/4, Screen.width/2, Screen.height/2), endGameMessage);
+		}
+	}
+
 	private void handleVictoryDefeatCountdown()
 	{
 		bool leftMeterMaxed = (leftConfidenceMeterValue >= MAX_CONFIDENCE_METER_AMOUNT);
@@ -189,7 +196,7 @@ public class byzantineBirdGen : MonoBehaviour {
 			//scoring logic for destroyed by arrow
 			totalBirdsDestroyed++;
 			score += SCORE_FOR_DESTROYING_BIRD_NORMAL;
-			scoreTracker.GetComponent<TextMesh>().text = "Score @ "+score; //update the score GUI
+			scoreTracker.GetComponent<TextMesh>().text = "Score : "+"\n"+score; //update the score GUI
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
 			if (rightConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
