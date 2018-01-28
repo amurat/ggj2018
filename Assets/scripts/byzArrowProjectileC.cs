@@ -14,6 +14,7 @@ public class byzArrowProjectileC : MonoBehaviour {
 		{
 			if (projectileHitAudioClip) {
 				AudioSource.PlayClipAtPoint(projectileHitAudioClip, transform.position);
+				FindObjectOfType<byzantineBirdGen> ().DestroyBird (birdDestroyMethod.DESTROYED_BY_ARROW);
 			}
 			GameObject.Destroy(collision.gameObject);
 			GameObject.Destroy(gameObject);

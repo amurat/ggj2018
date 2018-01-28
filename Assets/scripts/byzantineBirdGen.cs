@@ -184,7 +184,7 @@ public class byzantineBirdGen : MonoBehaviour {
 			//scoring logic for destroyed by arrow
 			totalBirdsDestroyed++;
 			score += SCORE_FOR_DESTROYING_BIRD_NORMAL;
-			scoreTracker.GetComponent<TextMesh>().text = "Score @ "+score; //update the score GUI
+			scoreTracker.GetComponent<TextMesh>().text = "Score : "+"\n"+score; //update the score GUI
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
 			if (rightConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
