@@ -28,7 +28,13 @@ public class byzantineBirdGen : MonoBehaviour {
 	float rightConfidenceMeterValue;
 	const float STARTING_CONFIDENCE = 20f;
 	float defaultConfidenceBoostAmount = 1f;
-	const float MAX_CONFIDENCE_METER_AMOUNT = 400f;
+	const float MAX_CONFIDENCE_METER_AMOUNT = 40f;
+	float leftConfidenceMeterStartingXPosition = -22.09f;
+	float leftConfidenceMeterEndingXPosition = -13.09f;
+	float rightConfidenceMeterStartingXPosition = 22.21f;
+	float rightConfidenceMeterEndingXPosition = 13.2f;
+	float confidenceMeterLength = 9f;
+
 	int totalBirdsDestroyed;
 	public int score;
 	const int SCORE_FOR_DESTROYING_BIRD_NORMAL = 20;
@@ -53,8 +59,7 @@ public class byzantineBirdGen : MonoBehaviour {
 	}
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update()    {
 		if (gameOver) {
 			return;
 		}
@@ -188,10 +193,12 @@ public class byzantineBirdGen : MonoBehaviour {
 		} else if (method == birdDestroyMethod.REACHED_RIGHT) {
 			rightConfidenceMeterValue += defaultConfidenceBoostAmount;
 			if (rightConfidenceMeterValue <= MAX_CONFIDENCE_METER_AMOUNT){
-				float confidenceMeterModifier = ( rightConfidenceMeterValue /  MAX_CONFIDENCE_METER_AMOUNT);
-				//conMeterRight.transform.Translate(Vector2.left*1);
+				float confidenceMeterModifier;
+				confidenceMeterModifier = (rightConfidenceMeterValue * confidenceMeterLength) / MAX_CONFIDENCE_METER_AMOUNT;
+			 	//conMeterRight.transform.Translate(Vector2.left*1);
+				conMeterRight.transform.localPosition= new Vector3(rightConfidenceMeterStartingXPosition - confidenceMeterModifier,  conMeterRight.transform.localPosition.y, 0f);
 				//conMeterRight.transform.localScale = new Vector3(0.6f + (0.035f * confidenceMeterModifier), 0, 0);
-				conMeterRight.transform.localScale += new Vector3(0.035f,0,0);
+				//conMeterRight.transform.localScale += new Vector3(0.035f,0,0);
 			}
 
 			//Debug.Log ("Right Confidence @ "+rightConfidenceMeterValue);
